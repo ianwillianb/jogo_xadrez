@@ -12,9 +12,8 @@ namespace JogoXadrez
     {
         static void Main(string[] args)
         {
-            Posicao pos = new Posicao(50, 25);
-            Console.WriteLine("Posição: " + pos);
-            Console.ReadLine();
+            Tabuleiro tab = new Tabuleiro(8, 8);
+            Tela.imprimeTabuleiro(tab);
 
         }
     }
