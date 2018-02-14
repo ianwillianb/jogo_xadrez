@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using JogoXadrez.tabuleiro;
+
+
+
 
 namespace JogoXadrez
 {
@@ -10,6 +12,10 @@ namespace JogoXadrez
     {
         static void Main(string[] args)
         {
+            Posicao pos = new Posicao(50, 25);
+            Console.WriteLine("Posição: " + pos);
+            Console.ReadLine();
+
         }
     }
 }
