@@ -13,9 +13,9 @@ namespace JogoXadrez.tabuleiro
         public int qteMovimentos {get;set;}
         public Tabuleiro tab { get; protected set; }
 
-        public Peca(Posicao posicao, Tabuleiro tab, Cor cor)
+        public Peca(Tabuleiro tab, Cor cor)
         {
-            this.posicao = posicao;
+            posicao = null; //posição definida nas subclasses
             this.cor = cor;
             qteMovimentos = 0;
             this.tab = tab;
