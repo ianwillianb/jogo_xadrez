@@ -12,14 +12,33 @@ namespace JogoXadrez
     {
         static void Main(string[] args)
         {
-            Tabuleiro tab = new Tabuleiro(8, 8);
+            
             try
             {
 
-                tab.insertPeca(new Torre(tab, Cor.Preta), new Posicao(0, 0));
-                tab.insertPeca(new Torre(tab, Cor.Preta), new Posicao(1, 3));
-                tab.insertPeca(new Rei(tab, Cor.Branca), new Posicao(2, 4));
-                tab.insertPeca(new Rei(tab, Cor.Branca), new Posicao(0, 5));
+                Partida partida = new Partida();
+                Tela.imprimeTabuleiro(partida.tab);
+
+                while (!partida.finalizada)
+                {   
+                    Console.Clear();
+                    Tela.imprimeTabuleiro(partida.tab);
+
+                    
+                    Console.Write("\nOrigem: ");
+                    Posicao org = Tela.lerPosicao().toPosicao();
+                    Console.Clear();
+                    Tela.imprimeTabuleiro(partida.tab, partida.tab.GetPeca(org).MovPossiveis());
+
+                    Console.Write("Destino: ");
+                    Posicao dest = Tela.lerPosicao().toPosicao();
+
+                    partida.ExecMov(org, dest);
+
+                }
+            
+              
+
 
             }
             catch (TabuleiroException e)
@@ -27,7 +46,7 @@ namespace JogoXadrez
                 Console.WriteLine(e.Message);
             }
 
-            Tela.imprimeTabuleiro(tab);
+            
 
             //PositionToName name = new PositionToName('a', 1);
             //Console.WriteLine(name.toPosicao().ToString());

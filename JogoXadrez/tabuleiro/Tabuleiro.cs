@@ -21,7 +21,7 @@ namespace JogoXadrez.tabuleiro
 
         public Peca GetPeca(int linha, int coluna)
         {
-            VerificaPosicao(new Posicao(linha, coluna));
+            VerificaPosicaoException(new Posicao(linha, coluna));
             return pecas[linha, coluna];
             
         }
@@ -41,6 +41,17 @@ namespace JogoXadrez.tabuleiro
 
             pecas[pos.linha, pos.coluna] = p;
             p.posicao = pos;
+        }
+
+        public Peca RetirarPeca(Posicao pos)
+        {
+            if (!ExistePeca(pos)) return null;
+
+            Peca aux = GetPeca(pos);
+            aux.posicao = null;
+            pecas[pos.linha, pos.coluna] = null;
+            return aux;
+            
         }
 
         public bool VerificaPosicao(Posicao pos)
