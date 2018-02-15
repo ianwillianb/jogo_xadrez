@@ -6,8 +6,8 @@ namespace JogoXadrez.xadrez
     class Partida
     {
         public Tabuleiro tab { get; private set; }
-        private int turno;
-        private Cor currentPlayer;
+        public int turno { get; private set; }
+        public Cor currentPlayer { get; private set; }
         public bool finalizada { get; private set; }
 
         public Partida()
@@ -21,12 +21,47 @@ namespace JogoXadrez.xadrez
            
         }
 
+        public void ValidarPosOrigem(Posicao pos)
+        {
+            if(tab.GetPeca(pos)==null)
+            {
+                throw new TabuleiroException("Não Existe Peça Na Posição de Origem!");
+            }
+
+            if(tab.GetPeca(pos).cor != currentPlayer)
+            {
+                throw new TabuleiroException("Peça Escolhida Pertence ao Jogador com As Peças " +tab.GetPeca(pos).cor + "!");
+            }
+
+            if(!tab.GetPeca(pos).existeMovimentosPossiveis())
+            {
+                throw new TabuleiroException("Não Existem Movimentos Disponíveis!");
+            }
+        }
+
         public void ExecMov(Posicao org, Posicao dest )
         {
             Peca p = tab.RetirarPeca(org);
             p.IncMovimentos();
             Peca capturada = tab.RetirarPeca(dest);
             tab.insertPeca(p, dest);
+        }
+
+        public void RealizaJogada(Posicao org, Posicao dest)
+        {
+            ExecMov(org, dest);
+            turno++;
+            mudaJogador();
+
+        }
+
+        public void mudaJogador()
+        {
+            if (currentPlayer == Cor.Branca)
+            {
+                currentPlayer = Cor.Preta;
+            }
+            else currentPlayer = Cor.Branca;
         }
 
         private void InserirPecasTab()
