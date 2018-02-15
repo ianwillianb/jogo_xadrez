@@ -113,6 +113,32 @@ namespace JogoXadrez
 
         }
 
+        
+
+        public static void imprimirPeca(Peca peca)
+        {
+
+            if (peca == null)
+            {
+                Console.Write("- ");
+            }
+            else
+            {
+                if (peca.cor == Cor.Branca)
+                {
+                    Console.Write(peca);
+                }
+                else
+                {
+                    ConsoleColor aux = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(peca);
+                    Console.ForegroundColor = aux;
+                }
+                Console.Write(" ");
+            }
+        }
+
         public static PositionToName lerPosicao()
         {   
             string s = Console.ReadLine().ToLower();
@@ -126,8 +152,8 @@ namespace JogoXadrez
             imprimeTabuleiro(partida.tab);
             Console.WriteLine();
             ImprimirPecasCapturadas(partida);
-           // Console.WriteLine();
-            Console.WriteLine("\nTurno: " + partida.turno);
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + partida.turno);
             Console.WriteLine("Aguardando Jogada: " + partida.currentPlayer);
 
         }
@@ -139,8 +165,12 @@ namespace JogoXadrez
             imprimeConjunto(partida.pecasCapturadasList(Cor.Branca));
 
             Console.Write("Pretas:  ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             imprimeConjunto(partida.pecasCapturadasList(Cor.Preta));
+            Console.ForegroundColor = aux;
             Console.WriteLine("------------------------------");
+
 
         }
 
@@ -149,7 +179,7 @@ namespace JogoXadrez
             Console.Write("[");
             foreach(Peca x in conjutoPecas)
             {
-                Console.Write(x.ToString()+",");
+                Console.Write(x + ",");
             }
             Console.WriteLine("]");
         }

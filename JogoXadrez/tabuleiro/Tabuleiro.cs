@@ -45,7 +45,7 @@ namespace JogoXadrez.tabuleiro
 
         public Peca RetirarPeca(Posicao pos)
         {
-            if (!ExistePeca(pos)) return null;
+            if (GetPeca(pos) == null) { return null; }
 
             Peca aux = GetPeca(pos);
             aux.posicao = null;
@@ -66,7 +66,7 @@ namespace JogoXadrez.tabuleiro
 
         public void VerificaPosicaoException(Posicao pos)
         {
-            if(VerificaPosicao(pos)==false)
+            if(!VerificaPosicao(pos))
             {
 
                 throw new TabuleiroException("Posição Inválida.");

@@ -11,7 +11,7 @@ namespace JogoXadrez.tabuleiro
         public Posicao posicao { get; set; }
         public Cor cor { get; protected set; }
         public int qteMovimentos {get;set;}
-        public Tabuleiro tab { get; protected set; }
+        public Tabuleiro tab { get;  set; }
 
         public Peca(Tabuleiro tab, Cor cor)
         {
@@ -26,6 +26,12 @@ namespace JogoXadrez.tabuleiro
             qteMovimentos++;
         }
 
+
+        public void decrementarQteMovimentos()
+        {
+            qteMovimentos--;
+        }
+
         public abstract bool[,] MovPossiveis();
         
         public bool existeMovimentosPossiveis()
@@ -35,7 +41,7 @@ namespace JogoXadrez.tabuleiro
             {
                 for(int j = 0;j<tab.colunas;j++)
                 {
-                    if (mat[i,j] == true)
+                    if (mat[i,j])
                     {
                         return true;
                     }

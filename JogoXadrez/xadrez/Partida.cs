@@ -114,7 +114,7 @@ namespace JogoXadrez.xadrez
             {
                 currentPlayer = Cor.Preta;
             }
-            else currentPlayer = Cor.Branca;
+            else { currentPlayer = Cor.Branca; }
         }
 
         public void ColocarNovaPeca(char coluna, int linha, Peca peca)
@@ -126,6 +126,8 @@ namespace JogoXadrez.xadrez
         private void InserirPecasTab()
         {
             ColocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
+            
+            
             ColocarNovaPeca('c', 2, new Torre(tab, Cor.Branca));
             ColocarNovaPeca('d', 2, new Torre(tab, Cor.Branca));
             ColocarNovaPeca('e', 2, new Torre(tab, Cor.Branca));
@@ -138,6 +140,9 @@ namespace JogoXadrez.xadrez
             ColocarNovaPeca('e', 7, new Torre(tab, Cor.Preta));
             ColocarNovaPeca('e', 8, new Torre(tab, Cor.Preta));
             ColocarNovaPeca('d', 8, new Torre(tab, Cor.Preta));
+            
+           
+           
 
 
 
