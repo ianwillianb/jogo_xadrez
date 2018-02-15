@@ -37,6 +37,7 @@ namespace JogoXadrez
 
                     Console.Write("Destino: ");
                     Posicao dest = Tela.lerPosicao().toPosicao();
+                    partida.ValidarPosDestino(org, dest);
 
                     partida.RealizaJogada(org, dest);
                 }

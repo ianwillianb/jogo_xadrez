@@ -39,6 +39,15 @@ namespace JogoXadrez.xadrez
             }
         }
 
+        public void ValidarPosDestino(Posicao origem, Posicao destino)
+        {
+
+            if(!tab.GetPeca(origem).PodeMoverPos(destino))
+            {
+                throw new TabuleiroException("Posição de Destino Inválida!");
+            }
+        }
+
         public void ExecMov(Posicao org, Posicao dest )
         {
             Peca p = tab.RetirarPeca(org);

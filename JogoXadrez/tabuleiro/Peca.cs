@@ -46,6 +46,12 @@ namespace JogoXadrez.tabuleiro
 
         }
 
+        public bool PodeMoverPos(Posicao pos)
+        {
+
+            return MovPossiveis()[pos.linha, pos.coluna];
+        }
+
 
         
     }
