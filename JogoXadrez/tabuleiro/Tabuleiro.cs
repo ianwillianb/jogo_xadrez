@@ -19,16 +19,59 @@ namespace JogoXadrez.tabuleiro
             pecas = new Peca[linhas, colunas];
         }
 
-        public Peca getPeca(int linha, int coluna)
+        public Peca GetPeca(int linha, int coluna)
         {
+            VerificaPosicao(new Posicao(linha, coluna));
             return pecas[linha, coluna];
             
         }
 
-        public void insertPeca(Peca p, Posicao pos)
+        public Peca GetPeca(Posicao pos)
         {
+            VerificaPosicaoException(pos);
+            return pecas[pos.linha, pos.coluna];                
+        }
+
+        public void insertPeca(Peca p, Posicao pos)
+        {   
+            if(ExistePeca(pos))
+            {
+                throw new TabuleiroException("Já Existe Uma Peça No Local!");
+            }
+
             pecas[pos.linha, pos.coluna] = p;
             p.posicao = pos;
+        }
+
+        public bool VerificaPosicao(Posicao pos)
+        {
+            if(pos.linha<0 || pos.linha>=linhas || pos.coluna<0 || pos.coluna>=colunas)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void VerificaPosicaoException(Posicao pos)
+        {
+            if(VerificaPosicao(pos)==false)
+            {
+
+                throw new TabuleiroException("Posição Inválida.");
+            }
+        }
+
+        public bool ExistePeca(Posicao pos)
+        {
+            VerificaPosicaoException(pos);
+
+            if(GetPeca(pos) == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -12,14 +12,14 @@ namespace JogoXadrez
             {
                 for(int j=0;j<tab.colunas;j++)
                 {
-                    if (tab.getPeca(i, j) == null)
+                    if (tab.GetPeca(i, j) == null)
                     {   //Imprime o traço caso não existam peças na posição
                         Console.Write("- ");
                     }
                     else
                     {
                         //Imprime a Peça
-                        Console.Write(tab.getPeca(i, j) + " ");
+                        Console.Write(tab.GetPeca(i, j) + " ");
                     }
                 }
 
