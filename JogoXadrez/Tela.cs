@@ -10,6 +10,7 @@ namespace JogoXadrez
         {
             for(int i=0;i<tab.linhas;i++)
             {
+                Console.Write( ((tab.linhas)-i) + " " );
                 for(int j=0;j<tab.colunas;j++)
                 {
                     if (tab.GetPeca(i, j) == null)
@@ -18,14 +19,33 @@ namespace JogoXadrez
                     }
                     else
                     {
-                        //Imprime a Peça
-                        Console.Write(tab.GetPeca(i, j) + " ");
+                        //Imprime a Peça de Acordo Se É Branca ou Preta
+                        Peca aux = tab.GetPeca(i, j);
+                        if (aux.cor == Cor.Branca) { Console.Write(aux + " "); }
+                        else
+                        {
+                            ConsoleColor auxcolor = Console.ForegroundColor;
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write(aux + " ");
+                            Console.ForegroundColor = auxcolor;
+                        }   
+
                     }
                 }
 
+
                 //Parte para a proxíma linha quando todas as colunas da linha forem percorridas
-                Console.WriteLine(); 
+                Console.WriteLine();
+                
             }
+
+            
+            for (int j = 0;j<tab.colunas;j++)
+            {
+                if (j == 0) Console.Write(" ");
+                Console.Write(" "+(char)('A'+j));
+            }
+            Console.WriteLine();
         }
 
     }
