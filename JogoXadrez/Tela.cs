@@ -114,31 +114,6 @@ namespace JogoXadrez
         }
 
         
-
-        public static void imprimirPeca(Peca peca)
-        {
-
-            if (peca == null)
-            {
-                Console.Write("- ");
-            }
-            else
-            {
-                if (peca.cor == Cor.Branca)
-                {
-                    Console.Write(peca);
-                }
-                else
-                {
-                    ConsoleColor aux = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write(peca);
-                    Console.ForegroundColor = aux;
-                }
-                Console.Write(" ");
-            }
-        }
-
         public static PositionToName lerPosicao()
         {   
             string s = Console.ReadLine().ToLower();
@@ -155,6 +130,10 @@ namespace JogoXadrez
             Console.WriteLine();
             Console.WriteLine("Turno: " + partida.turno);
             Console.WriteLine("Aguardando Jogada: " + partida.currentPlayer);
+            if(partida.xeque)
+            {
+                Console.WriteLine("Jogador com As Peças " + partida.currentPlayer + "s está em Xeque!");
+            }
 
         }
 
