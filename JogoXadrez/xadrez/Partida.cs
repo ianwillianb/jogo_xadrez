@@ -9,14 +9,20 @@ namespace JogoXadrez.xadrez
         public int turno { get; private set; }
         public Cor currentPlayer { get; private set; }
         public bool finalizada { get; private set; }
+        private HashSet<Peca> pecas;
+        private HashSet<Peca> capturadas;
+
 
         public Partida()
         {
             tab = new Tabuleiro(8, 8);
             turno = 1;
             currentPlayer = Cor.Branca;
-            InserirPecasTab();
             finalizada = false;
+            pecas = new HashSet<Peca>();
+            capturadas = new HashSet<Peca>();
+            InserirPecasTab();
+            
             
            
         }
@@ -54,6 +60,44 @@ namespace JogoXadrez.xadrez
             p.IncMovimentos();
             Peca capturada = tab.RetirarPeca(dest);
             tab.insertPeca(p, dest);
+            if(capturada != null)
+            {
+                capturadas.Add(capturada);
+            }
+        }
+
+        public HashSet<Peca> pecasCapturadasList(Cor cor)
+        {
+            HashSet<Peca> aux = new HashSet<Peca>();
+            foreach(Peca x in capturadas)
+            {
+                if(x.cor == cor)
+                {
+                    aux.Add(x);
+                }
+
+            }
+
+            return aux;
+
+        }
+
+        public HashSet<Peca> pecasEmJogoList(Cor cor)
+        {
+            HashSet<Peca> aux = new HashSet<Peca>();
+            foreach (Peca x in pecas)
+            {
+                if (x.cor == cor)
+                {
+                    aux.Add(x);
+                }
+
+            }
+
+            aux.ExceptWith(pecasCapturadasList(cor));
+
+            return aux;
+
         }
 
         public void RealizaJogada(Posicao org, Posicao dest)
@@ -73,13 +117,30 @@ namespace JogoXadrez.xadrez
             else currentPlayer = Cor.Branca;
         }
 
+        public void ColocarNovaPeca(char coluna, int linha, Peca peca)
+        {
+            tab.insertPeca(peca, new PositionToName(coluna, linha).toPosicao());
+            pecas.Add(peca); 
+        }
+
         private void InserirPecasTab()
         {
-            
-            tab.insertPeca(new Torre(tab, Cor.Preta), new PositionToName('a', 1).toPosicao());
-            tab.insertPeca(new Torre(tab, Cor.Preta), new PositionToName('b', 2).toPosicao());
-            tab.insertPeca(new Rei(tab, Cor.Branca), new PositionToName('c', 3).toPosicao());
-            tab.insertPeca(new Rei(tab, Cor.Branca), new PositionToName('d', 4).toPosicao());
+            ColocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('c', 2, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('d', 2, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('e', 2, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('e', 1, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
+
+            ColocarNovaPeca('c', 7, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('c', 8, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('d', 7, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('e', 7, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('e', 8, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('d', 8, new Torre(tab, Cor.Preta));
+
+
+
         }
     }
 }

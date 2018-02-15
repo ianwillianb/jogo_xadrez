@@ -1,7 +1,7 @@
 ﻿using System;
 using JogoXadrez.tabuleiro;
 using JogoXadrez.xadrez;
-
+using System.Collections.Generic;
 
 namespace JogoXadrez
 {
@@ -85,12 +85,12 @@ namespace JogoXadrez
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write(aux + " ");
                             Console.ForegroundColor = auxcolor;
-                            Console.BackgroundColor = fundOrginal;
+                            
                         }
-
+                        
                     }
 
-                    
+                    Console.BackgroundColor = fundOrginal;
                 }
 
 
@@ -120,6 +120,39 @@ namespace JogoXadrez
             int linha = int.Parse(s[1] + "");
             return new PositionToName(coluna, linha);
 ;       }
+
+        public static void imprimirPartida(Partida partida)
+        {
+            imprimeTabuleiro(partida.tab);
+            Console.WriteLine();
+            ImprimirPecasCapturadas(partida);
+           // Console.WriteLine();
+            Console.WriteLine("\nTurno: " + partida.turno);
+            Console.WriteLine("Aguardando Jogada: " + partida.currentPlayer);
+
+        }
+
+        public static void ImprimirPecasCapturadas(Partida partida)
+        {
+            Console.WriteLine("-------Peças Capturadas-------");
+            Console.Write("Brancas: ");
+            imprimeConjunto(partida.pecasCapturadasList(Cor.Branca));
+
+            Console.Write("Pretas:  ");
+            imprimeConjunto(partida.pecasCapturadasList(Cor.Preta));
+            Console.WriteLine("------------------------------");
+
+        }
+
+        public static void imprimeConjunto(HashSet<Peca> conjutoPecas)
+        {
+            Console.Write("[");
+            foreach(Peca x in conjutoPecas)
+            {
+                Console.Write(x.ToString()+",");
+            }
+            Console.WriteLine("]");
+        }
 
     }
 }

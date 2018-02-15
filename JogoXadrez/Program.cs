@@ -25,9 +25,7 @@ namespace JogoXadrez
                 try
                 {
                     Console.Clear();
-                    Tela.imprimeTabuleiro(partida.tab);
-                    Console.WriteLine("\nTurno: " + partida.turno);
-                    Console.WriteLine("Aguardando Jogada: " + partida.currentPlayer);
+                    Tela.imprimirPartida(partida);
 
                     Console.Write("\nOrigem: ");
                     Posicao org = Tela.lerPosicao().toPosicao();
