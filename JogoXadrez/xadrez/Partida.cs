@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using JogoXadrez.tabuleiro;
+using JogoXadrez.xadrez;
+
 namespace JogoXadrez.xadrez
 {
     class Partida
@@ -12,6 +14,7 @@ namespace JogoXadrez.xadrez
         private HashSet<Peca> pecas;
         private HashSet<Peca> capturadas;
         public bool xeque { get; private set; }
+        public Peca vulneravelEnPassant { get; private set; }
 
 
         public Partida()
@@ -23,6 +26,7 @@ namespace JogoXadrez.xadrez
             pecas = new HashSet<Peca>();
             capturadas = new HashSet<Peca>();
             xeque = false;
+            vulneravelEnPassant = null;
             InserirPecasTab();
 
             
@@ -68,6 +72,46 @@ namespace JogoXadrez.xadrez
                 capturadas.Add(capturada);
             }
 
+
+            // #jogadaespecial roque pequeno
+            if (p is Rei && dest.coluna == org.coluna + 2)
+            {
+                Posicao origemT = new Posicao(org.linha, org.coluna + 3);
+                Posicao destinoT = new Posicao(org.linha, org.coluna + 1);
+                Peca T = tab.RetirarPeca(origemT);
+                T.IncMovimentos();
+                tab.insertPeca(T, destinoT);
+            }
+
+            // #jogadaespecial roque grande
+            if (p is Rei && dest.coluna == org.coluna - 2)
+            {
+                Posicao origemT = new Posicao(org.linha, org.coluna - 4);
+                Posicao destinoT = new Posicao(org.linha, org.coluna - 1);
+                Peca T = tab.RetirarPeca(origemT);
+                T.IncMovimentos();
+                tab.insertPeca(T, destinoT);
+            }
+
+            // #jogadaespecial en passant
+            if (p is Peao)
+            {
+                if (org.coluna != dest.coluna && capturada == null)
+                {
+                    Posicao posP;
+                    if (p.cor == Cor.Branca)
+                    {
+                        posP = new Posicao(dest.linha + 1, dest.coluna);
+                    }
+                    else
+                    {
+                        posP = new Posicao(dest.linha - 1, dest.coluna);
+                    }
+                    capturada = tab.RetirarPeca(posP);
+                    capturadas.Add(capturada);
+                }
+            }
+
             return capturada;
         }
 
@@ -82,6 +126,45 @@ namespace JogoXadrez.xadrez
             }
 
             tab.insertPeca(p, origem);
+
+            // #jogadaespecial roque pequeno
+            if (p is Rei && destino.coluna == origem.coluna + 2)
+            {
+                Posicao origemT = new Posicao(origem.linha, origem.coluna + 3);
+                Posicao destinoT = new Posicao(origem.linha, origem.coluna + 1);
+                Peca T = tab.RetirarPeca(destinoT);
+                T.decrementarQteMovimentos();
+                tab.insertPeca(T, origemT);
+            }
+
+            // #jogadaespecial roque grande
+            if (p is Rei && destino.coluna == origem.coluna - 2)
+            {
+                Posicao origemT = new Posicao(origem.linha, origem.coluna - 4);
+                Posicao destinoT = new Posicao(origem.linha, origem.coluna - 1);
+                Peca T = tab.RetirarPeca(destinoT);
+                T.decrementarQteMovimentos();
+                tab.insertPeca(T, origemT);
+            }
+
+            // #jogadaespecial en passant
+            if (p is Peao)
+            {
+                if (origem.coluna != destino.coluna && capturada == vulneravelEnPassant)
+                {
+                    Peca peao = tab.RetirarPeca(destino);
+                    Posicao posP;
+                    if (p.cor == Cor.Branca)
+                    {
+                        posP = new Posicao(3, destino.coluna);
+                    }
+                    else
+                    {
+                        posP = new Posicao(4, destino.coluna);
+                    }
+                    tab.insertPeca(peao, posP);
+                }
+            }
         }
 
         public HashSet<Peca> pecasCapturadasList(Cor cor)
@@ -168,30 +251,39 @@ namespace JogoXadrez.xadrez
         private void InserirPecasTab()
         {
 
-            ColocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
-            ColocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
-            ColocarNovaPeca('h', 7, new Torre(tab, Cor.Branca));
-            ColocarNovaPeca('a', 8, new Rei(tab, Cor.Preta));
-            ColocarNovaPeca('b', 8, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('a', 1, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('b', 1, new Cavalo(tab, Cor.Branca));
+            ColocarNovaPeca('c', 1, new Bispo(tab, Cor.Branca));
+            ColocarNovaPeca('d', 1, new Dama(tab, Cor.Branca));
+            ColocarNovaPeca('e', 1, new Rei(tab, Cor.Branca, this));
+            ColocarNovaPeca('f', 1, new Bispo(tab, Cor.Branca));
+            ColocarNovaPeca('g', 1, new Cavalo(tab, Cor.Branca));
+            ColocarNovaPeca('h', 1, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('a', 2, new Peao(tab, Cor.Branca, this));
+            ColocarNovaPeca('b', 2, new Peao(tab, Cor.Branca, this));
+            ColocarNovaPeca('c', 2, new Peao(tab, Cor.Branca, this));
+            ColocarNovaPeca('d', 2, new Peao(tab, Cor.Branca, this));
+            ColocarNovaPeca('e', 2, new Peao(tab, Cor.Branca, this));
+            ColocarNovaPeca('f', 2, new Peao(tab, Cor.Branca, this));
+            ColocarNovaPeca('g', 2, new Peao(tab, Cor.Branca, this));
+            ColocarNovaPeca('h', 2, new Peao(tab, Cor.Branca, this));
 
-            /*
-            ColocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
-            
-            
-            ColocarNovaPeca('c', 2, new Torre(tab, Cor.Branca));
-            ColocarNovaPeca('d', 2, new Torre(tab, Cor.Branca));
-            ColocarNovaPeca('e', 2, new Torre(tab, Cor.Branca));
-            ColocarNovaPeca('e', 1, new Torre(tab, Cor.Branca));
-            ColocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
-            
-            ColocarNovaPeca('c', 7, new Torre(tab, Cor.Preta));
-            ColocarNovaPeca('c', 8, new Torre(tab, Cor.Preta));
-            ColocarNovaPeca('d', 7, new Torre(tab, Cor.Preta));
-            ColocarNovaPeca('e', 7, new Torre(tab, Cor.Preta));
-            ColocarNovaPeca('e', 8, new Torre(tab, Cor.Preta));
-            ColocarNovaPeca('d', 8, new Rei(tab, Cor.Preta));
-            
-           */
+            ColocarNovaPeca('a', 8, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('b', 8, new Cavalo(tab, Cor.Preta));
+            ColocarNovaPeca('c', 8, new Bispo(tab, Cor.Preta));
+            ColocarNovaPeca('d', 8, new Dama(tab, Cor.Preta));
+            ColocarNovaPeca('e', 8, new Rei(tab, Cor.Preta, this));
+            ColocarNovaPeca('f', 8, new Bispo(tab, Cor.Preta));
+            ColocarNovaPeca('g', 8, new Cavalo(tab, Cor.Preta));
+            ColocarNovaPeca('h', 8, new Torre(tab, Cor.Preta));
+            ColocarNovaPeca('a', 7, new Peao(tab, Cor.Preta, this));
+            ColocarNovaPeca('b', 7, new Peao(tab, Cor.Preta, this));
+            ColocarNovaPeca('c', 7, new Peao(tab, Cor.Preta, this));
+            ColocarNovaPeca('d', 7, new Peao(tab, Cor.Preta, this));
+            ColocarNovaPeca('e', 7, new Peao(tab, Cor.Preta, this));
+            ColocarNovaPeca('f', 7, new Peao(tab, Cor.Preta, this));
+            ColocarNovaPeca('g', 7, new Peao(tab, Cor.Preta, this));
+            ColocarNovaPeca('h', 7, new Peao(tab, Cor.Preta, this));
 
         }
 
@@ -247,9 +339,9 @@ namespace JogoXadrez.xadrez
                         {
                             Posicao origem = x.posicao;
                             Posicao destino = new Posicao(i, j);
-                            Peca capturada = ExecMov(x.posicao, destino);
+                            Peca capturada = ExecMov(origem, destino);
                             bool testeXeque = VericaXeque(c);
-                            desfazMov(x.posicao, destino, capturada);
+                            desfazMov(origem, destino, capturada);
                             if(!testeXeque)
                             {
                                 return false;
