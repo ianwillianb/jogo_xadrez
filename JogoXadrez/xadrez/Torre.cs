@@ -72,7 +72,7 @@ namespace JogoXadrez.xadrez
                 {
                     break;
                 }
-                pos.coluna = pos.coluna + 1;
+                pos.coluna = pos.coluna - 1;
             }
 
             return mat;

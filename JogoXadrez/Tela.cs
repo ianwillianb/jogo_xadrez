@@ -129,12 +129,19 @@ namespace JogoXadrez
             ImprimirPecasCapturadas(partida);
             Console.WriteLine();
             Console.WriteLine("Turno: " + partida.turno);
-            Console.WriteLine("Aguardando Jogada: " + partida.currentPlayer);
-            if(partida.xeque)
+            if (!partida.finalizada)
             {
-                Console.WriteLine("Jogador com As Peças " + partida.currentPlayer + "s está em Xeque!");
+                Console.WriteLine("Aguardando Jogada: " + partida.currentPlayer);
+                if (partida.xeque)
+                {
+                    Console.WriteLine("Jogador com As Peças " + partida.currentPlayer + "s está em Xeque!");
+                }
             }
 
+            else
+            {
+                Console.WriteLine("Xeque Mate! \nCor das Peças Vencedoas: " + partida.currentPlayer + "s");
+            }
         }
 
         public static void ImprimirPecasCapturadas(Partida partida)

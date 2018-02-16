@@ -75,7 +75,7 @@ namespace JogoXadrez.xadrez
         {
             Peca p = tab.RetirarPeca(destino);
             p.decrementarQteMovimentos();
-            if(capturada!= null)
+            if(capturada != null)
             {
                 tab.insertPeca(capturada,destino);
                 capturadas.Remove(capturada);
@@ -132,10 +132,21 @@ namespace JogoXadrez.xadrez
                 xeque = true;
             }
 
-            else xeque = false;
+            else
+            {
+                xeque = false;
 
-            turno++;
-            mudaJogador();
+            }
+
+            if (testeXequeMate(CorAdvers(currentPlayer)))
+            {
+                finalizada = true;
+            }
+            else
+            {
+                turno++;
+                mudaJogador();
+            }
 
         }
 
@@ -156,6 +167,14 @@ namespace JogoXadrez.xadrez
 
         private void InserirPecasTab()
         {
+
+            ColocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
+            ColocarNovaPeca('h', 7, new Torre(tab, Cor.Branca));
+            ColocarNovaPeca('a', 8, new Rei(tab, Cor.Preta));
+            ColocarNovaPeca('b', 8, new Torre(tab, Cor.Preta));
+
+            /*
             ColocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
             
             
@@ -164,7 +183,7 @@ namespace JogoXadrez.xadrez
             ColocarNovaPeca('e', 2, new Torre(tab, Cor.Branca));
             ColocarNovaPeca('e', 1, new Torre(tab, Cor.Branca));
             ColocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
-
+            
             ColocarNovaPeca('c', 7, new Torre(tab, Cor.Preta));
             ColocarNovaPeca('c', 8, new Torre(tab, Cor.Preta));
             ColocarNovaPeca('d', 7, new Torre(tab, Cor.Preta));
@@ -172,7 +191,7 @@ namespace JogoXadrez.xadrez
             ColocarNovaPeca('e', 8, new Torre(tab, Cor.Preta));
             ColocarNovaPeca('d', 8, new Rei(tab, Cor.Preta));
             
-           
+           */
 
         }
 
@@ -195,14 +214,14 @@ namespace JogoXadrez.xadrez
 
         public bool VericaXeque(Cor c)
         {
-            Peca Rei = returnRei(c);
-            if (Rei == null) throw new TabuleiroException("Um Rei Não Consta no Tabuleiro!");
+            Peca R = returnRei(c);
+            if (R == null) throw new TabuleiroException("Um Rei Não Consta no Tabuleiro!");
             
             foreach(Peca x in pecasEmJogoList(CorAdvers(c)))
             {
                 bool[,] mat = x.MovPossiveis();
 
-                if(mat[Rei.posicao.linha,Rei.posicao.coluna]==true)
+                if(mat[R.posicao.linha,R.posicao.coluna])
                 {
 
                     return true;
@@ -211,6 +230,36 @@ namespace JogoXadrez.xadrez
 
              return false;
 
+        }
+
+        public bool testeXequeMate(Cor c)
+        {
+            if(!VericaXeque(c)) { return false; }
+
+            foreach(Peca x in pecasEmJogoList(c))
+            {
+                bool[,] mat = x.MovPossiveis();
+                for(int i = 0;i<tab.linhas;i++)
+                {
+                    for(int j=0;j<tab.colunas;j++)
+                    {
+                        if(mat[i,j])
+                        {
+                            Posicao origem = x.posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca capturada = ExecMov(x.posicao, destino);
+                            bool testeXeque = VericaXeque(c);
+                            desfazMov(x.posicao, destino, capturada);
+                            if(!testeXeque)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true; //esta em xeque mate
         }
 
     }
